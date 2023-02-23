@@ -4,30 +4,30 @@ import java.util.*;
 import com.models.*;
 
 public class DocumnetManager {
-	Map<String, Document> docs;
+	Map<Integer, Document> docs;
 	
 	public DocumnetManager() {
-		this.docs= new HashMap<String, Document>();
+		this.docs= new HashMap<Integer, Document>();
 	}
 	
 	public void addDoc(User user, String documentName) {
 		Document document = new Document(documentName, user);
-		this.docs.put(document.getName(), document);
+		this.docs.put(document.getId(), document);
 		System.out.println("document " + document.getName() + " is added by " + document.getOwner().getName() + " with id " + user.getId());
 	}
 	
-	public void deleteDoc(User user, String doc_name) {
-		Document document = getDocument(doc_name);
-		if(isValidOwner(user, document)) {
-			docs.remove(doc_name);
+	public void deleteDoc(User user, int id) {
+		Document document = getDocument(id);
+		if(isValidOwner(user, docs.get(id))) {
+			docs.remove(id);
 			System.out.println("removed doc " + document.getName() + " by " + user.getName());
 			return;
 		}
 		System.out.println("cant delete doc as " + user.getName() + " is not valid owner of " + document.getName());
 	}
 	
-	public void addReadAccess(User owner, User user, String doc_name) {
-		Document document = getDocument(doc_name);
+	public void addReadAccess(User owner, User user, int id) {
+		Document document = getDocument(id);
 		if(!isValidOwner(owner, document)) {
 			System.out.println("cant add read acccess to doc as " + owner.getName() + " is not valid owner of " + document.getName());
 			return;
@@ -36,8 +36,8 @@ public class DocumnetManager {
 		System.out.println("added read access for " + user.getName() + " by " + owner.getName());
 	}
 	
-	public void addEditAccess(User owner, User user, String doc_name) {
-		Document documnet = getDocument(doc_name);
+	public void addEditAccess(User owner, User user, int id) {
+		Document documnet = getDocument(id);
 		if(!isValidOwner(owner, documnet)) {
 			System.out.println("cant add edit acccess to doc as " + owner.getName() + " is not valid owner of " + documnet.getName());
 			return;
@@ -47,8 +47,8 @@ public class DocumnetManager {
 		System.out.println("added edit access for " + user.getName() + " by " + owner.getName());
 	}
 	
-	public void addContent(User user, String doc_name, String content) {
-		Document document = getDocument(doc_name);
+	public void addContent(User user, int docId, String content) {
+		Document document = getDocument(docId);
 		if(!isValidAccessor(user.getId(), document.getEditAccess())) {
 			System.out.println("user " + user.getName() + " is not valid editor for file " + document.getName());
 			return;
@@ -59,8 +59,8 @@ public class DocumnetManager {
 		}
 	}
 	
-	public String readContent(User user, String doc_name) {
-		Document document = getDocument(doc_name);
+	public String readContent(User user, int docId) {
+		Document document = getDocument(docId);
 		if(!isValidAccessor(user.getId(), document.getReadAccess())) {
 			System.out.println("user " + user.getName() + " is not valid reader for file " + document.getName());
 			return null;
@@ -77,8 +77,8 @@ public class DocumnetManager {
 		return true;
 	}
 	
-	private Document getDocument(String doc_name) {
-		return this.docs.get(doc_name);
+	private Document getDocument(int id) {
+		return this.docs.get(id);
 	}
 	
 	private boolean isValidAccessor(int userId, Set<Integer> accessorSet) {

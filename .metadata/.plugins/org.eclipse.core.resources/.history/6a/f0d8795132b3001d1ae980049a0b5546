@@ -3,6 +3,7 @@ package com.models;
 import java.util.*;
 
 public class Document {
+	public static int totalDocs = 0;
 	private int id;
 	private String name;
 	private String content;
