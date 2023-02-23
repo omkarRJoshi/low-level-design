@@ -1,0 +1,53 @@
+package com.services;
+
+import java.util.*;
+import com.models.*;
+
+public class DocumnetManager {
+	Map<Integer, Document> docs;
+	
+	public DocumnetManager() {
+		this.docs= new HashMap<Integer, Document>();
+	}
+	
+	public void add_doc(String documentName, User user) {
+		Document document = new Document(documentName, user);
+		this.docs.put(document.getId(), document);
+	}
+	
+	public void delete_doc(User user, int id) {
+		if(isValidOwner(user, docs.get(id))) {
+			docs.remove(id);
+			System.out.println("removed doc");
+			return;
+		}
+		System.out.println("cant delete doc as not valid owner");
+	}
+	
+	public void add_read_access(User owner, User user, int id) {
+		Document doc = docs.get(id);
+		if(!isValidOwner(owner, docs.get(id))) {
+			System.out.println("cant add read acccess to doc as not valid owner");
+			return;
+		}
+		doc.getRead_access().add(user.getId());
+	}
+	
+	public void add_edit_access(User owner, User user, int id) {
+		Document documnet = docs.get(id);
+		if(!isValidOwner(owner, docs.get(id))) {
+			System.out.println("cant add edit acccess to doc as not valid owner");
+			return;
+		}
+		documnet.getRead_access().add(user.getId());
+		documnet.getEdit_access().add(user.getId());
+	}
+	
+	private boolean isValidOwner(User user, Document documnet) {
+		if(user.getId() != documnet.getOwner().getId()) {
+			System.out.println("user is not the owner");
+			return false;
+		}
+		return true;
+	}
+}

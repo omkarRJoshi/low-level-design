@@ -1,0 +1,55 @@
+package com.models;
+
+import java.util.*;
+
+public class Document {
+	public static int totalDocs = 0;
+	private int id;
+	private String name;
+	private String content;
+	private User owner;
+	Set<Integer> read_access;
+	Set<Integer> edit_access;
+	
+	public Document(String name, User owner) {
+		this.id = totalDocs++;
+		this.name = name;
+		this.owner = owner;
+		this.read_access.add(owner.getId());
+		this.edit_access.add(owner.getId());
+	}
+	
+	public Document(String name, User owner, String content) {
+		this(name, owner);
+		this.content = content;
+	}
+	
+	public void setContent(String content) {
+		this.content = content;
+	}
+	
+	public String getContent() {
+		return this.content;
+	}
+	
+	public Set<Integer> getReadAccess() {
+		return read_access;
+	}
+
+	public Set<Integer> getEditAccess() {
+		return edit_access;
+	}
+	
+	
+	public String getName() {
+		return this.name;
+	}
+	
+	public int getId() {
+		return this.id;
+	}
+	
+	public User getOwner() {
+		return this.owner;
+	}
+}

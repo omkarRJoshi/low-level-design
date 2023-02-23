@@ -1,0 +1,13 @@
+package com.services;
+
+import java.util.*;
+import com.models.*;
+
+public class DocumnetManager {
+	Map<Integer, Document> docs;
+	
+	public void add_doc(String documentName, User user) {
+		Document document = new Document(documentName, user);
+		this.docs.add(document.getId(), document);
+	}
+}

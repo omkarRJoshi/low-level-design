@@ -1,0 +1,15 @@
+package com.entry;
+
+import com.services.DocumnetManager;
+import com.models.*;
+
+public class Main {
+
+	public static void main(String[] args) {
+		DocumnetManager documentManager = new DocumnetManager();
+		
+		User u1 = new User(omkar);
+
+	}
+
+}

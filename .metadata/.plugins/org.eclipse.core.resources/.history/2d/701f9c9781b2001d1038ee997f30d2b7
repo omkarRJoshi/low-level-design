@@ -1,0 +1,37 @@
+package com.models;
+
+import java.util.*;
+
+public class Document {
+	public static int totalDocs = 0;
+	private int id;
+	private String name;
+	private String content;
+	private User owner;
+	Set<Integer> read_access;
+	Set<Integer> edit_access;
+	
+	public Document(String name, User owner) {
+		this.id = totalDocs++;
+		this.name = name;
+		this.owner = owner;
+		this.read_access.add(owner);
+		this.edit_access.add(owner);
+	}
+	
+	public Document(String name, User owner, String content) {
+		this(name, owner);
+		this.content = content;
+	}
+	
+	public void setContent(User user, String content) {
+		
+	}
+	
+	private boolean isValidEditor(User user) {
+		if(edit_access.contains(user.getId())) {
+			return true;
+		}
+		return false;
+	}
+}

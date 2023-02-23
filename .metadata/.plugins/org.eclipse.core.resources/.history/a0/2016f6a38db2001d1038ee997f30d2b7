@@ -1,0 +1,87 @@
+package com.models;
+
+import java.util.*;
+
+public class Document {
+	public static int totalDocs = 0;
+	private int id;
+	private String name;
+	private String content;
+	private User owner;
+	Set<Integer> read_access;
+	Set<Integer> edit_access;
+	
+	public Document(String name, User owner) {
+		this.id = totalDocs++;
+		this.name = name;
+		this.owner = owner;
+		this.read_access.add(owner.getId());
+		this.edit_access.add(owner.getId());
+	}
+	
+	public Document(String name, User owner, String content) {
+		this(name, owner);
+		this.content = content;
+	}
+	
+	public void setContent(User user, String content) {
+		if(!isValidAccessor(user, this.edit_access)) {
+			System.out.println("User with user id " + user.getId() + " does not have an access to edit this doc");
+			return;
+		}
+		this.content = content;
+		System.out.println("content set success");
+	}
+	
+	public String getContent(User user) {
+		if(!isValidAccessor(user, read_access)) {
+			System.out.println("not valid reader");
+			return "";
+		}
+		return this.content;
+	}
+	
+	public void add_read_access(User owner, User user) {
+		if(!isValidOwner(owner)) {
+			System.out.println("cant add read acccess to doc as not valid owner");
+			return;
+		}
+		this.read_access.add(user.getId());
+	}
+	
+	public void add_edit_access(User owner, User user, Document documnet) {
+		if(!isValidOwner(owner)) {
+			System.out.println("cant add edit acccess to doc as not valid owner");
+			return;
+		}
+		this.read_access.add(user.getId());
+		this.edit_access.add(user.getId());
+	}
+	
+	public String getName() {
+		return this.name;
+	}
+	
+	public int getId() {
+		return this.id;
+	}
+	
+	public User getOwner() {
+		return this.owner;
+	}
+	
+	private boolean isValidAccessor(User user, Set<Integer> accessor) {
+		if(accessor.contains(user.getId())) {
+			return true;
+		}
+		return false;
+	}
+	
+	private boolean isValidOwner(User user) {
+		if(user.getId() != this.getOwner().getId()) {
+			System.out.println("user is not the owner");
+			return false;
+		}
+		return true;
+	}
+}

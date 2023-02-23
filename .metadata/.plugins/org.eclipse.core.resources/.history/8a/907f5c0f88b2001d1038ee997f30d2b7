@@ -1,0 +1,12 @@
+package com.entry;
+
+import com.services.DocumnetManager;
+
+public class Main {
+
+	public static void main(String[] args) {
+		DocumnetManager documentManager = new DocumnetManager();
+
+	}
+
+}

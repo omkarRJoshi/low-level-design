@@ -1,0 +1,54 @@
+package com.models;
+
+import java.util.*;
+
+public class Document {
+	public static int totalDocs = 0;
+	private int id;
+	private String name;
+	private String content;
+	private User owner;
+	Set<Integer> read_access;
+	Set<Integer> edit_access;
+	
+	public Document(String name, User owner) {
+		this.id = totalDocs++;
+		this.name = name;
+		this.owner = owner;
+		this.read_access.add(owner.getId());
+		this.edit_access.add(owner.getId());
+	}
+	
+	public Document(String name, User owner, String content) {
+		this(name, owner);
+		this.content = content;
+	}
+	
+	public void setContent(User user, String content) {
+		if(!isValidAccessor(user, this.edit_access)) {
+			System.out.println("User with user id " + user.getId() + " does not have an access to edit this doc");
+			return;
+		}
+		this.content = content;
+		System.out.println("content set success");
+	}
+	
+	public String getContent(User user) {
+		if(!isValidAccessor(user, read_access)) {
+			System.out.println("not valid reader");
+			return "";
+		}
+		return this.content;
+	}
+	
+	private boolean isValidAccessor(User user, Set<Integer> accessor) {
+		if(accessor.contains(user.getId())) {
+			return true;
+		}
+		return false;
+	}
+	
+	public int getId() {
+		return id;
+	}
+}

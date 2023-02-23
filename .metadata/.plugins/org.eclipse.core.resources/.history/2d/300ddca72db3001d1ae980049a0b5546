@@ -1,0 +1,23 @@
+package com.entry;
+
+import com.services.DocumnetManager;
+import com.models.*;
+
+public class Main {
+
+	public static void main(String[] args) {
+		DocumnetManager documentManager = new DocumnetManager();
+		
+		User u1 = new User("omkar");
+		User u2 = new User("akash");
+		User u3 = new User("suraj");
+		
+		documentManager.add_doc(u1, "doc_by_omkar");
+		documentManager.add_doc(u2, "doc_by_akash");
+		
+		documentManager.add_read_access(u1, u2, 0);
+		
+		
+	}
+
+}

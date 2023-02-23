@@ -1,0 +1,87 @@
+package com.services;
+
+import java.util.*;
+import com.models.*;
+
+public class DocumnetManager {
+	Map<Integer, Document> docs;
+	
+	public DocumnetManager() {
+		this.docs= new HashMap<Integer, Document>();
+	}
+	
+	public void addDoc(User user, String documentName) {
+		Document document = new Document(documentName, user);
+		this.docs.put(document.getId(), document);
+		System.out.println("document " + document.getName() + " is added by " + document.getOwner() + " with id " + user.getId());
+	}
+	
+	public void deleteDoc(User user, int id) {
+		if(isValidOwner(user, docs.get(id))) {
+			docs.remove(id);
+			System.out.println("removed doc");
+			return;
+		}
+		System.out.println("cant delete doc as not valid owner");
+	}
+	
+	public void addReadAccess(User owner, User user, int id) {
+		Document document = getDocument(id);
+		if(!isValidOwner(owner, document)) {
+			System.out.println("cant add read acccess to doc as not valid owner");
+			return;
+		}
+		document.getReadAccess().add(user.getId());
+	}
+	
+	public void addEditAccess(User owner, User user, int id) {
+		Document documnet = getDocument(id);
+		if(!isValidOwner(owner, documnet)) {
+			System.out.println("cant add edit acccess to doc as not valid owner");
+			return;
+		}
+		documnet.getReadAccess().add(user.getId());
+		documnet.getEditAccess().add(user.getId());
+	}
+	
+	public void addContent(User user, int docId, String content) {
+		Document document = getDocument(docId);
+		if(!isValidAccessor(user.getId(), document.getEditAccess())) {
+			System.out.println("user " + user.getName() + " is not valid editor for file " + document.getName());
+			return;
+		}
+		else {
+			document.setContent(content);
+		}
+	}
+	
+	public String readContent(User user, int docId) {
+		Document document = getDocument(docId);
+		if(!isValidAccessor(user.getId(), document.getReadAccess())) {
+			System.out.println("user " + user.getName() + " is not valid editor for file " + document.getName());
+			return "";
+		}
+		else {
+			return document.getContent();
+		}
+	}
+	
+	private boolean isValidOwner(User user, Document documnet) {
+		if(user.getId() != documnet.getOwner().getId()) {
+			System.out.println("user is not the owner");
+			return false;
+		}
+		return true;
+	}
+	
+	private Document getDocument(int id) {
+		return this.docs.get(id);
+	}
+	
+	private boolean isValidAccessor(int userId, Set<Integer> accessorSet) {
+		if(!accessorSet.contains(userId)) {
+			return false;
+		}
+		return true;
+	}
+}

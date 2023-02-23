@@ -1,0 +1,31 @@
+package com.services;
+
+import java.util.*;
+import com.models.*;
+
+public class DocumnetManager {
+	Map<Integer, Document> docs;
+	
+	public void add_doc(String documentName, User user) {
+		Document document = new Document(documentName, user);
+		this.docs.put(document.getId(), document);
+	}
+	
+	public void delete_doc(User user, Document documnet) {
+		if(isValidOwner(user, documnet)) {
+			docs.remove(documnet.getId());
+			System.out.println("removed doc");
+			return;
+		}
+		System.out.println("cant delete doc as not valid owner");
+	}
+	
+	
+	private boolean isValidOwner(User user, Document documnet) {
+		if(user.getId() != documnet.getOwner().getId()) {
+			System.out.println("user is not the owner");
+			return false;
+		}
+		return true;
+	}
+}
